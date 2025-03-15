@@ -41,21 +41,34 @@ The below log is for keeping track of changes made to this project
 	- serio.c
 	- serio.h
 
-# How to compile on windows the client via windows
-Compiling for Windows  
+# Building
+## Compiling for Linux
+```sh
+git clone https://github.com/illinoistechrobotics/roslund-serialctl-2025.git
+cd roslund-serialctl-2025/serialctl-client
+make
+```
+
+## Compiling for Windows  
 - Install Cygwin https://www.cygwin.com/setup-x86_64.exe  
 - Add packages when prompted: `libSDL2-devel libSDL2_2.0_0 make git gcc-core`  
 - Use latest stable package versions.  
 
 
 Open Cygwin64 Terminal
-- `git clone https://github.com/illinoistechrobotics roslund-serialctl-2025.git`
+- `git clone https://github.com/illinoistechrobotics/roslund-serialctl-2025.git`
 - `cd serialctl`
 - make windows
 - the folder `release` now contains a portable windows build with the necessary DLLs. Run from commandline like on Linux
 
+# Running
+## Running on Linux
 
-# How to connect to Roslund from windows
+- Install the `rfcomm` program (on Arch Linux, this can be installed with the `bluez-deprecated-tools` package)
+- Run `serialctl-client/bluetooth-xrp.sh` as superuser.
+
+## Running on Windows
+### Connecting to Roslund
 
 - Open Bluetooth and connect to roslund
 	- (it will disconnect dont worry)
@@ -64,7 +77,7 @@ Open Cygwin64 Terminal
 
 From there you should be able to see what com ports are used for communicating with roslund. 
 
-# How to RUN 
+### Start Controller
 
 - Open the `release` folder and run your terminal from there
 - To start driving the robot run this command
