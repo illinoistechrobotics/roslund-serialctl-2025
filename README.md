@@ -64,8 +64,9 @@ Open Cygwin64 Terminal
 # Running
 ## Running on Linux
 
-- Install the `rfcomm` program (on Arch Linux, this can be installed with the `bluez-deprecated-tools` package)
-- Run `serialctl-client/bluetooth-xrp.sh` as superuser.
+- Install the bluez utility packages required (on Arch, `bluez-utils` and `bluez-deprecated-utils`; you need the `rfcomm` and `bluetoothctl` commands)
+- Pair your robot, it will disconnect after pairing but this is expected.
+- Run `serialctl-client/bluetooth-helper.sh` as superuser, and select the correct device.
 
 ## Running on Windows
 ### Connecting to Roslund
