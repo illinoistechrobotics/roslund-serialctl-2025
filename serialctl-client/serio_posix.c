@@ -4,6 +4,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 
 struct connection{
@@ -16,7 +19,7 @@ struct connection{
 
 connection_t *serio_open(const char *device){
 
-        struct conection * ctx;
+        struct connection * ctx;
         int opts;
 
         if (device == NULL){
@@ -98,14 +101,13 @@ void serio_close(connection_t *ctx){
         free(ctx);
 }
 
-ssize_t serio_send(connection_t *ctx, const void *data, size_t len){
+int serio_send(connection_t *ctx, const void *data, size_t len){
         
         char datap[2 + B64_ENC_LEN(sizeof(packet_t))];
         
         int rv;
         ssize_t written;
         
-        char datap[2+B64_ENC_LEN(len)];
         if(ctx == NULL || ctx->fd==-1 || len==0 || data==NULL){
                 return -3;
         }
@@ -135,7 +137,7 @@ int serio_recv(connection_t *ctx, char *buf, size_t buflen)
         size_t linelen;
         ssize_t n;
 
-        if (citx == NULL || ctx->fd == -1 || buf == NULL || buflen == 0){
+        if (ctx == NULL || ctx->fd == -1 || buf == NULL || buflen == 0){
                 return -1;
         }
 
@@ -146,7 +148,7 @@ int serio_recv(connection_t *ctx, char *buf, size_t buflen)
         do { 
                 if(ctx->bidx == RECVBUF-1){
                         ctx->bidx=0;
-                        fprintf("Input buffer overflow!\n");
+                        fprintf(stderr, "Input buffer overflow!\n");
                         memset(ctx->ba,0x00,RECVBUF);
                 }
                 n = read(ctx->fd, ctx->ba+ctx->bidx, (size_t)(RECVBUF-(ctx->bidx+1)));  // read as much as possible
@@ -159,7 +161,7 @@ int serio_recv(connection_t *ctx, char *buf, size_t buflen)
                 ctx->ba[ctx->bidx]='\0';
         } while(strchr(ctx->ba,'\n') == NULL);
         buf[0]='\0';
-        next = strchr(ba,'\n');
+        next = strchr(ctx->ba,'\n');
         *next = '\0';
         next++;
         if(ctx->ba[0] != '$'){

@@ -213,7 +213,7 @@ int serio_recv(connection_t *ctx, char *buf, size_t buflen)
 
     }  while(strchr(ctx->ba,'\n') == NULL);
         buf[0]='\0';
-        next = strchr(ba,'\n');
+        next = strchr(ctx->ba,'\n');
         *next = '\0';
         next++;
         if(ctx->ba[0] != '$'){
