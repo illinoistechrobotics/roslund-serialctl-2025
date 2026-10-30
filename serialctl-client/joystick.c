@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <signal.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 
 SDL_Joystick *jstick;
@@ -65,11 +64,11 @@ int joystick_wait_safe(){
                 if (SDL_JoystickGetAttached(jstick) == SDL_FALSE)
                 return -1;
                 for(i=0;i<8;i++){
-                        usleep(1E5);
+                        SDL_Delay(100);
                         SDL_JoystickUpdate();
                 }
                 for(i=0;i<SDL_JoystickNumAxes(jstick);i++){
-                        if(abs(SDL_JoystickGetAxis(jstick, 1)) > 256){
+                        if(abs(SDL_JoystickGetAxis(jstick, i)) > 256){
                                printf("Axis %i is at %i\n", i, SDL_JoystickGetAxis(jstick, i));
                                unsafe=1;
                         }
@@ -81,7 +80,7 @@ int joystick_wait_safe(){
                         }
                 }
                 for(i=0; (i<SDL_JoystickNumHats(jstick)); i++){
-                        if(SDL_JoystickGetButton(jstick,i) != 0){
+                        if(SDL_JoystickGetHat(jstick,i) != 0){
                                 printf("Hat %i is not centered\n",i);
                                 unsafe=1;
                         }

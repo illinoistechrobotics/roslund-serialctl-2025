@@ -1,22 +1,16 @@
-#include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
-#include <fcntl.h>
+#ifndef SERIO_H
+#define SERIO_H
 
-//Serial debug output
-#ifdef DEBUG
-#undef DEBUG
-#endif
+#include <stddef.h>
 
 #define RECVBUF 256
-typedef struct{
-        int fd;
-        struct termios spconfig;
-        const char *device;
-} connection_t;
+typedef struct connection connection_t;
+connection_t *serio_open(const char *device);
 
 
 int serio_init(connection_t *ctx, const char *serdev);
-ssize_t serio_send(connection_t *ctx, void *data, size_t len);
-ssize_t serio_recv(connection_t *ctx, char *buf);
+int serio_send(connection_t *ctx, const void *data, size_t len);
+int serio_recv(connection_t *ctx, char *buf, size_t buflen);
 void serio_close(connection_t *ctx);
+
+#endif
